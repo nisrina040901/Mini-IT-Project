@@ -1,18 +1,25 @@
 import tkinter as tk
 from tkinter import messagebox
-from PIL import ImageTk
+from PIL import Image,ImageTk
+import bcrypt
 
-# Create the main window
+backgrounds = "#06283D"
+framebg = "#EDEDED"
+framefg = "#06283D"
+
 mac = tk.Tk()
-mac.title("Login")
+mac.title("Login System")
+mac.geometry("1250x700+210+100")
+mac.config(bg=backgrounds)
+mac.resizable(False, False)
 
 # Simulated user and admin credentials
 user_credentials = {"Azhar": "password1", "Ainee": "password2", "Masyii":"password3"}
 admin_credentials = {"lc Amir": "adminpassword" , "Lc Jason": "adminpassword2"}
 
 def login():
-    username = username_entry.get()
-    password = password_entry.get()
+    username =user.get()
+    password =password.get()
 
     if username in user_credentials and user_credentials[username] == password:
         messagebox.showinfo("Login", "Student login successful!")
@@ -21,42 +28,106 @@ def login():
     else:
         messagebox.showerror("Login", "Invalid credentials")
 
-# Create background size when pop out
-mac.geometry('1280x700+0+0')
+#Password Encryption
+def login():
+    username = user.get()
+    password = password.get()
 
-mac.resizable(False,False)
+    if username in user_credentials and bcrypt.checkpw(password.encode('utf-8'), user_credentials[username].encode('utf-8')):
+        messagebox.showinfo("Login", "Student login successful!")
+    elif username in admin_credentials and bcrypt.checkpw(password.encode('utf-8'), admin_credentials[username].encode('utf-8')):
+        messagebox.showinfo("Login", "Admin login successful!")
+    else:
+        messagebox.showerror("Login", "Invalid credentials")
 
-#background color
-mac.title("Login")
-background_color = "lightblue"
-mac.configure(bg=background_color)
-#background_color.place(x=0, y=0)
+# Simulated user and admin credentials with hashed passwords
+user_credentials = {
+    "Azhar": bcrypt.hashpw("password1".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+    "Ainee": bcrypt.hashpw("password2".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+    "Masyii": bcrypt.hashpw("password3".encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+}
 
-#Place the username and password 
-loginFrame=tk.Frame(mac,bg='lightblue')
-loginFrame.place(x=400,y=150)
+admin_credentials = {
+    "lc Amir": bcrypt.hashpw("adminpassword".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+    "Lc Jason": bcrypt.hashpw("adminpassword2".encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+}
 
+# Icon Image
+image_Icon = tk.PhotoImage(file="loginIcon.png")
+mac.iconphoto(False, image_Icon)
 
-# Create the loginFrame
-#loginFrame = tk.Frame(mac, width=300, height=200, bg="lightgray")  # Adjust width, height, and background color
-#loginFrame.place(x=400, y=150)
+# Background Image
+frame = tk.Frame(mac, bg=framebg)
+frame.pack(fill="both", expand=True)
 
+backgroundImage = Image.open("login.jpg")
+backgroundImage = ImageTk.PhotoImage(backgroundImage)
+tk.Label(frame, image=backgroundImage).pack()
 
-# Create and place widgets
-username_label = tk.Label(mac, text="Username:")
-username_label.pack()
+# User Entry
+def user_enter(e):
+    user.delete(0, 'end')
 
-username_entry = tk.Entry(mac)
-username_entry.pack()
+def user_leave(e):
+    name = user.get()
+    if name == 'Username':
+        user.delete(0, 'end')
+        user.insert(0, 'Username')
 
-password_label = tk.Label(mac, text="Password:")
-password_label.pack()
+user = tk.Entry(frame, width=18, fg="black", border=0, bg="#fff", font=('Arial Bold', 24))
+user.insert(0, 'Username')
+user.bind("<FocusIn>", user_enter)
+user.bind("<FocusOut>", user_leave)
+user.place(x=500, y=315)
 
-password_entry = tk.Entry(mac, show="*")
-password_entry.pack()
+usernameImage=Image.open('username.png')
+usernameLabel=tk.Label(tk.loginFrame,image=usernameImage,text='Username',compound='left'
+                   ,font=('times new roman' ,20,'bold' ))
+usernameLabel.grid(row=1,column=0,pady=10)
 
-login_button = tk.Button(mac, text="Login", command=login)
-login_button.pack()
+# Password Entry
+def password_enter(e):
+    password.delete(0, 'end')
 
-# Start the main loop
+def password_leave(e):
+    name = password.get()
+    if name == '':
+        password.delete(0, 'end')
+        password.insert(0, 'Password')
+
+password =tk.Entry(frame, width=18, fg="black", border=0, bg="#fff", font=('Arial Bold', 24))
+password.insert(0, 'Password')
+password.bind("<FocusIn>", password_enter)
+password.bind("<FocusOut>", password_leave)
+password.place(x=500, y=360)
+
+passwordImage=Image.open('password.png')
+passwordLabel=tk.Label(tk.loginFrame,image=passwordImage,text='password',compound='left'
+                   ,font=('times new roman',20,'bold'))
+passwordLabel.grid(row=2,column=0,pady=10)
+
+# Hide And Show Button (to be added)
+button_mode=True
+
+def hide():
+    global button_mode
+
+    if button_mode:
+        eyeButton.config(image=closeeye,activebackground="white")
+        code=tk.Entry(frame, show="*")
+        button_mode=False
+    else:
+        eyeButton.config(image=openeye,activebackground="white")
+        code.config(show="")
+        button_mode=True
+
+openeye=Image.open("eye.png")
+closeeye=Image.open("closeEye.png")
+eyeButton=tk.Button(frame,image=openeye,bg="#fff",bd=0,command=hide)
+eyeButton.place(x=780,y=410)
+
+#Login Button
+loginButton=tk.Button(mac,text="LOGIN",bg="#A9A9A9",fg="white",width=10,height=1,font=("arial ",16,"bold"),bd=0)
+loginButton.place(x=570,y=500)
+
 mac.mainloop()
