@@ -64,13 +64,19 @@ backgroundImage = Image.open("login.jpg")
 backgroundImage = ImageTk.PhotoImage(backgroundImage)
 tk.Label(frame, image=backgroundImage).pack()
 
+#Students Icon
+studentIcon=Image.open("graduated.png")
+studentIcon= ImageTk.PhotoImage(studentIcon)
+studentIconLabel = tk.Label(frame, image=studentIcon)
+studentIconLabel.place(x=555, y=155)
+
 # User Entry
 def user_enter(e):
     user.delete(0, 'end')
 
 def user_leave(e):
     name = user.get()
-    if name == 'Username':
+    if name == 'Username' or name == '':
         user.delete(0, 'end')
         user.insert(0, 'Username')
 
@@ -83,6 +89,11 @@ user.place(x=500, y=315)
 usernameImage = Image.open('username.png')
 usernamePhotoImage = ImageTk.PhotoImage(usernameImage)
 usernameLabel = tk.Label(frame, image=usernamePhotoImage, text='password', compound='left', font=('times new roman', 20, 'bold'))
+usernameImage = Image.open('username.png')
+usernamePhotoImage = ImageTk.PhotoImage(usernameImage)
+usernameLabel = tk.Label(frame, image=usernamePhotoImage)
+usernameLabel.image = usernamePhotoImage  # Store a reference to the image to prevent it from being garbage collected
+usernameLabel.place(x=450, y=315)  # Place the label on the frame
 
 # Password Entry
 def password_enter(e):
@@ -103,6 +114,11 @@ password.place(x=500, y=360)
 passwordImage = Image.open('password.png')
 passwordPhotoImage = ImageTk.PhotoImage(passwordImage)
 passwordLabel = tk.Label(frame, image=passwordPhotoImage, text='password', compound='left', font=('times new roman', 20, 'bold'))
+passwordImage = Image.open('password.png')
+passwordPhotoImage = ImageTk.PhotoImage(passwordImage)
+passwordLabel = tk.Label(frame, image=passwordPhotoImage)
+passwordLabel.image = passwordPhotoImage  # Store a reference to the image to prevent it from being garbage collected
+passwordLabel.place(x=450, y=360)  # Place the label on the frame
 
 # Hide And Show Button (to be added)
 button_mode=True
