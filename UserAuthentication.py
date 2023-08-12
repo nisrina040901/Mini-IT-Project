@@ -80,10 +80,9 @@ user.bind("<FocusIn>", user_enter)
 user.bind("<FocusOut>", user_leave)
 user.place(x=500, y=315)
 
-usernameImage=Image.open('username.png')
-usernameLabel=tk.Label(tk.loginFrame,image=usernameImage,text='Username',compound='left'
-                   ,font=('times new roman' ,20,'bold' ))
-usernameLabel.grid(row=1,column=0,pady=10)
+usernameImage = Image.open('username.png')
+usernamePhotoImage = ImageTk.PhotoImage(usernameImage)
+usernameLabel = tk.Label(frame, image=usernamePhotoImage, text='password', compound='left', font=('times new roman', 20, 'bold'))
 
 # Password Entry
 def password_enter(e):
@@ -101,10 +100,9 @@ password.bind("<FocusIn>", password_enter)
 password.bind("<FocusOut>", password_leave)
 password.place(x=500, y=360)
 
-passwordImage=Image.open('password.png')
-passwordLabel=tk.Label(tk.loginFrame,image=passwordImage,text='password',compound='left'
-                   ,font=('times new roman',20,'bold'))
-passwordLabel.grid(row=2,column=0,pady=10)
+passwordImage = Image.open('password.png')
+passwordPhotoImage = ImageTk.PhotoImage(passwordImage)
+passwordLabel = tk.Label(frame, image=passwordPhotoImage, text='password', compound='left', font=('times new roman', 20, 'bold'))
 
 # Hide And Show Button (to be added)
 button_mode=True
@@ -113,21 +111,28 @@ def hide():
     global button_mode
 
     if button_mode:
-        eyeButton.config(image=closeeye,activebackground="white")
-        code=tk.Entry(frame, show="*")
-        button_mode=False
+        eyeButton.config(image=closeeye, activebackground="white")
+        password.config(show="*")
+        button_mode = False
     else:
-        eyeButton.config(image=openeye,activebackground="white")
-        code.config(show="")
-        button_mode=True
+        eyeButton.config(image=openeye, activebackground="white")
+        password.config(show="")
+        button_mode = True
 
-openeye=Image.open("eye.png")
-closeeye=Image.open("closeEye.png")
+
+openeye=Image.open("OpenEye.png")
+openeye = ImageTk.PhotoImage(openeye)
+openeyeLabel = tk.Label(frame, image=openeye)
+
+closeeye=Image.open("CloseEye.png")
+closeeye= ImageTk.PhotoImage(closeeye)
+passwordLabel = tk.Label(frame, image=closeeye)
+
 eyeButton=tk.Button(frame,image=openeye,bg="#fff",bd=0,command=hide)
-eyeButton.place(x=780,y=410)
+eyeButton.place(x=724,y=360)
 
 #Login Button
-loginButton=tk.Button(mac,text="LOGIN",bg="#A9A9A9",fg="white",width=10,height=1,font=("arial ",16,"bold"),bd=0)
-loginButton.place(x=570,y=500)
+loginButton=tk.Button(mac,text="LOGIN",bg="#A9A9A9",fg="black",width=10,height=1,font=("arial ",16,"bold"),bd=0)
+loginButton.place(x=550,y=450)
 
 mac.mainloop()
