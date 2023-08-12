@@ -13,32 +13,27 @@ mac.geometry("1250x700+210+100")
 mac.config(bg=backgrounds)
 mac.resizable(False, False)
 
-# Simulated user and admin credentials
-user_credentials = {"Azhar": "password1", "Ainee": "password2", "Masyii":"password3"}
-admin_credentials = {"lc Amir": "adminpassword" , "Lc Jason": "adminpassword2"}
-
-def login():
-    username =user.get()
-    password =password.get()
-
-    if username in user_credentials and user_credentials[username] == password:
-        messagebox.showinfo("Login", "Student login successful!")
-    elif username in admin_credentials and admin_credentials[username] == password:
-        messagebox.showinfo("Login", "Admin login successful!")
-    else:
-        messagebox.showerror("Login", "Invalid credentials")
-
 #Password Encryption
 def login():
     username = user.get()
-    password = password.get()
+    entered_password = password.get()
 
-    if username in user_credentials and bcrypt.checkpw(password.encode('utf-8'), user_credentials[username].encode('utf-8')):
-        messagebox.showinfo("Login", "Student login successful!")
-    elif username in admin_credentials and bcrypt.checkpw(password.encode('utf-8'), admin_credentials[username].encode('utf-8')):
-        messagebox.showinfo("Login", "Admin login successful!")
-    else:
-        messagebox.showerror("Login", "Invalid credentials")
+    # Check if the username exists
+    if username in user_credentials:
+        # Hash the entered password and compare it to the stored hash
+        if bcrypt.checkpw(entered_password.encode('utf-8'), user_credentials[username].encode('utf-8')):
+            messagebox.showinfo("Login", "Student login successful!")
+            return
+
+    # Check if the username exists in admin_credentials
+    if username in admin_credentials:
+        # Hash the entered password and compare it to the stored hash
+        if bcrypt.checkpw(entered_password.encode('utf-8'), admin_credentials[username].encode('utf-8')):
+            messagebox.showinfo("Login", "Admin login successful!")
+            return
+
+    # Invalid credentials
+    messagebox.showerror("Login", "Invalid credentials")
 
 # Simulated user and admin credentials with hashed passwords
 user_credentials = {
@@ -48,7 +43,7 @@ user_credentials = {
 }
 
 admin_credentials = {
-    "lc Amir": bcrypt.hashpw("adminpassword".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+    "Lc Amir": bcrypt.hashpw("adminpassword".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
     "Lc Jason": bcrypt.hashpw("adminpassword2".encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 }
 
@@ -148,7 +143,7 @@ eyeButton=tk.Button(frame,image=openeye,bg="#fff",bd=0,command=hide)
 eyeButton.place(x=724,y=360)
 
 #Login Button
-loginButton=tk.Button(mac,text="LOGIN",bg="#A9A9A9",fg="black",width=10,height=1,font=("arial ",16,"bold"),bd=0)
-loginButton.place(x=550,y=450)
+loginButton = tk.Button(mac, text="LOGIN", bg="#A9A9A9", fg="black", width=10, height=1, font=("arial", 16, "bold"), bd=0, command=login)
+loginButton.place(x=550, y=450)
 
 mac.mainloop()
