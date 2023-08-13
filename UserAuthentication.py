@@ -22,14 +22,14 @@ def login():
     if username in user_credentials:
         # Hash the entered password and compare it to the stored hash
         if bcrypt.checkpw(entered_password.encode('utf-8'), user_credentials[username].encode('utf-8')):
-            messagebox.showinfo("Login", "Student login successful!")
+            messagebox.showinfo("Login", "Student login successful !")
             return
 
     # Check if the username exists in admin_credentials
     if username in admin_credentials:
         # Hash the entered password and compare it to the stored hash
         if bcrypt.checkpw(entered_password.encode('utf-8'), admin_credentials[username].encode('utf-8')):
-            messagebox.showinfo("Login", "Admin login successful!")
+            messagebox.showinfo("Login", "Admin login successful !")
             return
 
     # Invalid credentials
